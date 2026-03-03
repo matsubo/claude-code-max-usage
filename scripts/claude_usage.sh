@@ -8,11 +8,12 @@ set -uo pipefail
 # --- Argument parsing ---
 MODE="tmux"
 COMPACT=false
+COMPACT_EXPLICIT=false
 
 for arg in "$@"; do
     case "$arg" in
         --mode=*) MODE="${arg#--mode=}" ;;
-        --compact) COMPACT=true ;;
+        --compact) COMPACT=true; COMPACT_EXPLICIT=true ;;
     esac
 done
 
@@ -55,6 +56,15 @@ THRESHOLD_WARN=$(opt "@claude_usage_threshold_warn" "CLAUDE_USAGE_THRESHOLD_WARN
 THRESHOLD_CRIT=$(opt "@claude_usage_threshold_crit" "CLAUDE_USAGE_THRESHOLD_CRIT" "80")
 CREDS=$(opt "@claude_usage_credentials" "CLAUDE_USAGE_CREDENTIALS" "$HOME/.claude/.credentials.json")
 ICON=$(opt "@claude_usage_icon" "CLAUDE_USAGE_ICON" "󰚩")
+COMPACT_WIDTH=$(opt "@claude_usage_compact_width" "CLAUDE_USAGE_COMPACT_WIDTH" "120")
+
+# --- Auto-compact based on terminal width ---
+if ! $COMPACT_EXPLICIT && [ -n "${TMUX:-}" ] && command -v tmux &>/dev/null; then
+    client_width=$(tmux display-message -p '#{client_width}' 2>/dev/null || echo "0")
+    if [ "$client_width" -gt 0 ] && [ "$client_width" -lt "$COMPACT_WIDTH" ]; then
+        COMPACT=true
+    fi
+fi
 
 CACHE_DIR="${XDG_RUNTIME_DIR:-/tmp}/tmux-claude-${UID}"
 mkdir -p "$CACHE_DIR" 2>/dev/null && chmod 700 "$CACHE_DIR" 2>/dev/null
