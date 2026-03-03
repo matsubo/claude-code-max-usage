@@ -1,5 +1,10 @@
 # Claude Code Max Usage
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Shell: Bash](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnubash&logoColor=white)](scripts/claude_usage.sh)
+[![tmux: TPM](https://img.shields.io/badge/tmux-TPM_Plugin-1BB91F?logo=tmux&logoColor=white)](https://github.com/tmux-plugins/tpm)
+[![Starship](https://img.shields.io/badge/Starship-Module-DD0B78?logo=starship&logoColor=white)](https://starship.rs)
+
 Display [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (Max Plan) API usage in your **tmux status bar** or **Starship prompt**.
 
 Shows 5-hour and 7-day utilization as compact progress bars with color-coded thresholds.
