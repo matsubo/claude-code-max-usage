@@ -45,7 +45,7 @@ opt() {
     echo "$default"
 }
 
-CACHE_TTL=$(opt "@claude_usage_cache_ttl" "CLAUDE_USAGE_CACHE_TTL" "300")
+CACHE_TTL=$(opt "@claude_usage_cache_ttl" "CLAUDE_USAGE_CACHE_TTL" "600")
 BAR_WIDTH=$(opt "@claude_usage_bar_width" "CLAUDE_USAGE_BAR_WIDTH" "5")
 GREEN=$(opt "@claude_usage_green" "CLAUDE_USAGE_GREEN" "#a6da95")
 YELLOW=$(opt "@claude_usage_yellow" "CLAUDE_USAGE_YELLOW" "#eed49f")
@@ -230,11 +230,15 @@ elif [ -n "$cached" ]; then
         (
             trap 'rmdir "$LOCK" 2>/dev/null' EXIT
             result=$(fetch_usage)
-            echo "$result" > "$CACHE"
+            if [ "$result" != "-" ]; then
+                echo "$result" > "$CACHE"
+            fi
         ) &
     fi
 else
     result=$(fetch_usage)
-    echo "$result" > "$CACHE"
+    if [ "$result" != "-" ]; then
+        echo "$result" > "$CACHE"
+    fi
     output_result "$result"
 fi

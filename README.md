@@ -81,7 +81,7 @@ tmux options take precedence when running inside tmux.
 
 | tmux option | env var | default | description |
 |---|---|---|---|
-| `@claude_usage_cache_ttl` | `CLAUDE_USAGE_CACHE_TTL` | `300` | Cache TTL in seconds |
+| `@claude_usage_cache_ttl` | `CLAUDE_USAGE_CACHE_TTL` | `600` | Cache TTL in seconds (10 min) |
 | `@claude_usage_bar_width` | `CLAUDE_USAGE_BAR_WIDTH` | `5` | Progress bar width (chars) |
 | `@claude_usage_green` | `CLAUDE_USAGE_GREEN` | `#a6da95` | OK color |
 | `@claude_usage_yellow` | `CLAUDE_USAGE_YELLOW` | `#eed49f` | Warning color |
