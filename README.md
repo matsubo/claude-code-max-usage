@@ -25,7 +25,7 @@ Shows 5-hour and 7-day utilization as compact progress bars with color-coded thr
 - `bash` (4.0+)
 - `jq`
 - `curl`
-- Claude Code Max Plan with OAuth credentials at `~/.claude/.credentials.json`
+- Claude Code Max Plan with OAuth credentials at `~/.claude/.credentials.json` or macOS Keychain
 
 ## Installation
 
@@ -56,7 +56,7 @@ Add to your `~/.config/starship.toml`:
 ```toml
 [custom.claude]
 command = "/path/to/claude-code-max-usage/scripts/claude_usage_starship.sh"
-when = "test -f ~/.claude/.credentials.json"
+when = "test -f ~/.claude/.credentials.json || security find-generic-password -s 'Claude Code-credentials' -w &>/dev/null"
 format = "[$output]($style) "
 style = ""
 shell = ["bash", "--noprofile", "--norc"]
@@ -124,7 +124,7 @@ Colors change based on thresholds:
 
 ## How It Works
 
-1. Reads OAuth token from `~/.claude/.credentials.json`
+1. Reads OAuth token from `~/.claude/.credentials.json`, falling back to macOS Keychain for Google OAuth users
 2. Calls the Anthropic usage API (`/api/oauth/usage`)
 3. Extracts `five_hour.utilization` and `seven_day.utilization`
 4. Renders colored progress bars (tmux format or ANSI escapes)

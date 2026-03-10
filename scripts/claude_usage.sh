@@ -134,10 +134,21 @@ format_segment() {
 }
 
 fetch_usage() {
-    if [ ! -f "$CREDS" ]; then echo "-"; return; fi
-
     local token
-    token=$(jq -r '.claudeAiOauth.accessToken // empty' "$CREDS")
+
+    if [ -f "$CREDS" ]; then
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' "$CREDS")
+    fi
+
+    # Fallback: macOS Keychain (Google OAuth users)
+    if [ -z "$token" ] && command -v security &>/dev/null; then
+        local keychain_data
+        keychain_data=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
+        if [ -n "$keychain_data" ]; then
+            token=$(echo "$keychain_data" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
+        fi
+    fi
+
     if [ -z "$token" ]; then echo "-"; return; fi
 
     local json
