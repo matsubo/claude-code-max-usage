@@ -161,8 +161,8 @@ fetch_usage() {
     if [ -z "$json" ]; then echo "-"; return; fi
 
     local s_pct w_pct
-    s_pct=$(echo "$json" | jq -r '.five_hour.utilization // empty' | awk '{printf "%.0f", $1 * 100}' 2>/dev/null)
-    w_pct=$(echo "$json" | jq -r '.seven_day.utilization // empty' | awk '{printf "%.0f", $1 * 100}' 2>/dev/null)
+    s_pct=$(echo "$json" | jq -r '.five_hour.utilization // empty' | awk '{printf "%.0f", $1}' 2>/dev/null)
+    w_pct=$(echo "$json" | jq -r '.seven_day.utilization // empty' | awk '{printf "%.0f", $1}' 2>/dev/null)
 
     if [ -z "$s_pct" ] || [ -z "$w_pct" ]; then echo "-"; return; fi
 
